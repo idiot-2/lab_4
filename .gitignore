@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite
+.env
+.venv/
+venv/
+
+# SQLite database
+lab04-flaskProject/db.sqlite
+
+# IDE files
+.vscode/
+.idea/
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+
+# Others
+*.log
