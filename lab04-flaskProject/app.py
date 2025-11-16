@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template
 from models import init_db
 from routes.feedback import feedback_bp
 from routes.admin import admin_bp

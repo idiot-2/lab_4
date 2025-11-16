@@ -1,12 +1,13 @@
 import sqlite3
 from datetime import datetime
+from typing import Any, Dict, List, Tuple, Optional
 
-def get_db_connection():
+def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect('db.sqlite')
     conn.row_factory = sqlite3.Row
     return conn
 
-def init_db():
+def init_db() -> None:
     conn = get_db_connection()
     conn.execute('CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, message TEXT)')
     conn.execute('CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price REAL, image TEXT)')
@@ -15,13 +16,13 @@ def init_db():
     conn.commit()
     conn.close()
 
-def get_products():
+def get_products() -> List[Dict[str, Any]]:
     conn = get_db_connection()
     products = conn.execute('SELECT * FROM products').fetchall()
     conn.close()
-    return products
+    return [dict(p) for p in products]
 
-def add_order(email, address, cart):
+def add_order(email: str, address: str, cart: Dict[str, Dict[str, Any]]) -> None:
     conn = get_db_connection()
     total_price = sum(item['price'] * item['quantity'] for item in cart.values())
     cur = conn.cursor()
@@ -34,26 +35,26 @@ def add_order(email, address, cart):
     conn.commit()
     conn.close()
 
-def get_orders():
+def get_orders() -> List[Any]:
     conn = get_db_connection()
     orders = conn.execute('SELECT * FROM orders').fetchall()
     conn.close()
     return orders
 
-def get_order_details(order_id):
+def get_order_details(order_id: int) -> Tuple[Optional[Any], List[Any]]:
     conn = get_db_connection()
     order = conn.execute('SELECT * FROM orders WHERE id = ?', (order_id,)).fetchone()
     items = conn.execute('SELECT oi.quantity, p.name, p.price FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?', (order_id,)).fetchall()
     conn.close()
     return order, items
 
-def update_order_status(order_id, status):
+def update_order_status(order_id: int, status: str) -> None:
     conn = get_db_connection()
     conn.execute('UPDATE orders SET status = ? WHERE id = ?', (status, order_id))
     conn.commit()
     conn.close()
 
-def delete_order(order_id):
+def delete_order(order_id: int) -> None:
     conn = get_db_connection()
     conn.execute('DELETE FROM order_items WHERE order_id = ?', (order_id,))
     conn.execute('DELETE FROM orders WHERE id = ?', (order_id,))
