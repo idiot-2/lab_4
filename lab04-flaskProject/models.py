@@ -60,3 +60,33 @@ def delete_order(order_id: int) -> None:
     conn.execute('DELETE FROM orders WHERE id = ?', (order_id,))
     conn.commit()
     conn.close()
+
+##register
+def insert_client(first_name, last_name, email, phone):
+    conn = sqlite3.connect("clients.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO client_name (first_name, last_name, email, phone)
+        VALUES (?, ?, ?, ?)
+    """, (first_name, last_name, email, phone))
+
+    conn.commit()
+    conn.close()
+
+
+def home():
+    return render_template("register.html")
+
+
+def register():
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    email = request.form.get("email", None)
+    phone = request.form.get("phone", None)
+
+    insert_client(first_name, last_name, email, phone)
+
+    return "Клієнта успішно зареєстровано!"
+
+

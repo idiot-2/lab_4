@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Реєстрація{% endblock %}
+{% block content %}
+    <h2>Форма реєстрації</h2>
+
+    <form action="/register" method="POST">
+        <label>Ім'я:</label><br>
+        <input type="text" name="first_name" required><br><br>
+
+        <label>Прізвище:</label><br>
+        <input type="text" name="last_name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email"><br><br>
+
+        <label>Телефон:</label><br>
+        <input type="text" name="phone"><br><br>
+
+        <button type="submit">Зареєструватися</button>
+    </form>
+{% endblock %}
