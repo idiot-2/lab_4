@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, flash, redirect, url_for
 from models import init_db
 from routes.feedback import feedback_bp
 from routes.admin import admin_bp
@@ -22,6 +22,15 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    # Simple route to render the register template and accept a placeholder POST.
+    # No notifications or flash messages are used (user preference).
+    if request.method == 'POST':
+        # Placeholder: currently we don't store the data. Just redirect to the same form.
+        return redirect(url_for('register'))
+    return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
