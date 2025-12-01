@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мій проєкт{% endblock %}</title>
+    <title>{% block title %}Магазин ключів стім{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bar {
@@ -71,6 +71,7 @@
                     <li><a href="{{ url_for('shop.cart') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Кошик</a></li>
                     <li><a href="{{ url_for('about') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Про нас</a></li>
                     <li><a href="{{ url_for('feedback.feedback') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Зворотній зв'язок</a></li>
+                    <li><a href="{{ url_for('dot.dot') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">.</a></li>
                 </ul>
             </div>
         </nav>
