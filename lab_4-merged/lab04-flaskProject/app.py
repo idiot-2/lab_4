@@ -5,9 +5,13 @@ from routes.feedback import feedback_bp
 from routes.admin import admin_bp
 from routes.shop import shop_bp
 from routes.dot import dot_bp
+from routes.api import api_bp
+
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Необхідно для роботи з сесіями
+app.register_blueprint(api_bp)
 
 # Ініціалізація бази даних
 init_db()
