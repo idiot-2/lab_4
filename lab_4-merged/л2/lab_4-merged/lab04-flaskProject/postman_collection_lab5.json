@@ -1,0 +1,168 @@
+{
+  "info": {
+    "_postman_id": "b1a2c3d4-5678-90ab-cdef-1234567890ab",
+    "name": "Lab05 - Shop API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for Lab05 REST API (products & orders). Base URL: http://127.0.0.1:5000"
+  },
+  "item": [
+    {
+      "name": "Get Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/products",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","products"]
+        },
+        "description": "Отримати список товарів."
+      },
+      "response": [
+        {
+          "name": "sample",
+          "originalRequest": {},
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"status\": \"success\",\n  \"data\": [{\"id\":1,\"name\":\"Product A\",\"price\":9.99}]\n}",
+          "header": [
+            {"key":"Content-Type","value":"application/json"}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"user@example.com\",\n  \"address\": \"123 Main St, City\",\n  \"cart\": [{\"product_id\": 1, \"quantity\": 2}]\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/orders",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","orders"]
+        },
+        "description": "Створити нове замовлення. Обов'язкові поля: email, address, cart."
+      },
+      "response": [
+        {
+          "name": "created",
+          "status": "Created",
+          "code": 201,
+          "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Order created\"\n}",
+          "header": [{"key":"Content-Type","value":"application/json"}]
+        }
+      ]
+    },
+    {
+      "name": "Get Orders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/orders",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","orders"]
+        },
+        "description": "Отримати список всіх замовлень."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Order by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/orders/:order_id",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","orders",":order_id"],
+          "variable": [
+            {"key":"order_id","value":"1","description":"ID замовлення"}
+          ]
+        },
+        "description": "Отримати конкретне замовлення (параметр в шляху)."
+      },
+      "response": [
+        {
+          "name": "ok",
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"status\": \"success\",\n  \"order\": {\"id\":1,\"email\":\"user@example.com\"},\n  \"items\": [{\"product_id\":1,\"quantity\":2}]\n}",
+          "header": [{"key":"Content-Type","value":"application/json"}]
+        },
+        {
+          "name": "not found",
+          "status": "Not Found",
+          "code": 404,
+          "_body": "{\n  \"status\": \"error\",\n  \"message\": \"Order not found\"\n}",
+          "header": [{"key":"Content-Type","value":"application/json"}]
+        }
+      ]
+    },
+    {
+      "name": "Update Order Status",
+      "request": {
+        "method": "PUT",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"status\": \"shipped\"\n}"},
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/orders/:order_id",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","orders",":order_id"],
+          "variable": [{"key":"order_id","value":"1","description":"ID замовлення"}]
+        },
+        "description": "Оновити статус замовлення. Тіло JSON: {\"status\": \"...\"}."
+      },
+      "response": [
+        {
+          "name": "updated",
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Status updated\"\n}",
+          "header": [{"key":"Content-Type","value":"application/json"}]
+        }
+      ]
+    },
+    {
+      "name": "Delete Order",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/orders/:order_id",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "5000",
+          "path": ["api","orders",":order_id"],
+          "variable": [{"key":"order_id","value":"1","description":"ID замовлення"}]
+        },
+        "description": "Видалити замовлення за ID."
+      },
+      "response": [
+        {
+          "name": "deleted",
+          "status": "OK",
+          "code": 200,
+          "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Order deleted\"\n}",
+          "header": [{"key":"Content-Type","value":"application/json"}]
+        }
+      ]
+    }
+  ]
+}
