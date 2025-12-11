@@ -1,47 +1,60 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flasgger import Swagger
 from models import init_db, get_products, create_user, verify_user
 import seed_data
+
+# Імпорт блюпрінтів
 from routes.feedback import feedback_bp
 from routes.admin import admin_bp
 from routes.shop import shop_bp
 from routes.dot import dot_bp
-from routes.api import api_bp
+from routes.api_v1 import api_v1_bp as api_v1_bp   # <-- api_v1
+from routes.api_v2 import api_v2_bp             # <--  api_v2
+from routes.errors import errors_bp             # <-- глобальні хендлери
 
-
-
+# -------------------------------
+# Створення Flask‑додатку
+# -------------------------------
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Необхідно для роботи з сесіями
-app.register_blueprint(api_bp)
+app.secret_key = 'your_secret_key'  # для роботи з сесіями
 
-# Swagger / Flasgger configuration (Level 2 documentation)
+# -------------------------------
+# Swagger / Flasgger configuration
+# -------------------------------
 swagger_template = {
     "info": {
-        "title": "Lab04 Shop API",
-        "description": "API for products and orders used in lab exercises (with Flasgger documentation)",
-        "version": "1.0.0"
+        "title": "Lab05 Shop API",
+        "description": "API for products and orders (Lab05, with validation, versions, error handling)",
+        "version": "2.0.0"
     },
     "schemes": ["http", "https"]
 }
 Swagger(app, template=swagger_template)
 
+# -------------------------------
 # Ініціалізація бази даних
+# -------------------------------
 init_db()
-
-# Якщо в таблиці `products` немає записів — додаємо тестові дані
 try:
     if not get_products():
         seed_data.seed_products()
 except Exception:
-    # Якщо щось піде не так — нехай додатково не падає сервіс при старті
-    pass
+    pass  # щоб не падало при старті
 
+# -------------------------------
 # Реєстрація блюпрінтів
+# -------------------------------
 app.register_blueprint(feedback_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(shop_bp)
 app.register_blueprint(dot_bp)
+app.register_blueprint(api_v1_bp)   # <-- v1
+app.register_blueprint(api_v2_bp)   # <-- v2
+app.register_blueprint(errors_bp)   # <-- errors
 
+# -------------------------------
+# Маршрути для сайту
+# -------------------------------
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -58,6 +71,7 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
         confirm = request.form.get('confirm_password')
+
         if not username or not email or not password:
             error = 'Всі поля обов\'язкові.'
         elif password != confirm:
@@ -71,7 +85,6 @@ def register():
             else:
                 error = 'Користувач з таким ім\'ям або email вже існує.'
     return render_template('register.html', error=error)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -88,12 +101,14 @@ def login():
             error = 'Неправильне ім\'я або пароль.'
     return render_template('login.html', error=error)
 
-
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     session.pop('user_id', None)
     return redirect(url_for('home'))
 
+# -------------------------------
+# Запуск
+# -------------------------------
 if __name__ == '__main__':
     app.run(debug=True)

@@ -32,6 +32,50 @@ def get_products() -> List[Dict[str, Any]]:
     return [dict(p) for p in products]
 
 
+def get_product_by_id(product_id: int) -> Optional[Dict[str, Any]]:
+    conn = get_db_connection()
+    row = conn.execute('SELECT * FROM products WHERE id = ?', (product_id,)).fetchone()
+    conn.close()
+    return dict(row) if row else None
+
+
+def create_product(name: str, price: float, image: Optional[str] = None) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('INSERT INTO products (name, price, image) VALUES (?, ?, ?)', (name, price, image))
+    conn.commit()
+    product_id = cur.lastrowid
+    conn.close()
+    return product_id
+
+
+def update_product(product_id: int, name: Optional[str] = None, price: Optional[float] = None, image: Optional[str] = None) -> bool:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM products WHERE id = ?', (product_id,))
+    if not cur.fetchone():
+        conn.close()
+        return False
+    cur.execute('UPDATE products SET name = ?, price = ?, image = ? WHERE id = ?',
+                (name, price, image, product_id))
+    conn.commit()
+    conn.close()
+    return True
+
+
+def delete_product(product_id: int) -> bool:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM products WHERE id = ?', (product_id,))
+    if not cur.fetchone():
+        conn.close()
+        return False
+    cur.execute('DELETE FROM products WHERE id = ?', (product_id,))
+    conn.commit()
+    conn.close()
+    return True
+
+
 def add_order(email: str, address: str, cart: Dict[str, Dict[str, Any]]) -> None:
     conn = get_db_connection()
     total_price = sum(item['price'] * item['quantity'] for item in cart.values())

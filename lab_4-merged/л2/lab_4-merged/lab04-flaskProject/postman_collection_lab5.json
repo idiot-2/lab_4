@@ -34,6 +34,169 @@
       ]
     },
     {
+  "name": "Get Product by ID",
+  "request": {
+    "method": "GET",
+    "header": [],
+    "url": {
+      "raw": "http://127.0.0.1:5000/api/products/:product_id",
+      "protocol": "http",
+      "host": ["127.0.0.1"],
+      "port": "5000",
+      "path": ["api","products",":product_id"],
+      "variable": [{ "key": "product_id", "value": "1", "description": "ID товару" }]
+    },
+    "description": "Отримати конкретний товар за ID."
+  },
+  "response": [
+    {
+      "name": "ok",
+      "status": "OK",
+      "code": 200,
+      "_body": "{ \"status\": \"success\", \"product\": { \"id\": 1, \"name\": \"Product A\", \"price\": 9.99 } }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "not found",
+      "status": "Not Found",
+      "code": 404,
+      "_body": "{ \"status\": \"error\", \"message\": \"Product not found\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "server error",
+      "status": "Internal Server Error",
+      "code": 500,
+      "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    }
+  ]
+},
+{
+  "name": "Create Product",
+  "request": {
+    "method": "POST",
+    "header": [{ "key": "Content-Type", "value": "application/json" }],
+    "body": {
+      "mode": "raw",
+      "raw": "{ \"name\": \"Product B\", \"price\": 19.99 }"
+    },
+    "url": {
+      "raw": "http://127.0.0.1:5000/api/products",
+      "protocol": "http",
+      "host": ["127.0.0.1"],
+      "port": "5000",
+      "path": ["api","products"]
+    },
+    "description": "Створити новий товар."
+  },
+  "response": [
+    {
+      "name": "created",
+      "status": "Created",
+      "code": 201,
+      "_body": "{ \"status\": \"success\", \"message\": \"Product created\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "invalid input",
+      "status": "Bad Request",
+      "code": 400,
+      "_body": "{ \"status\": \"error\", \"message\": \"Invalid input\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "server error",
+      "status": "Internal Server Error",
+      "code": 500,
+      "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    }
+  ]
+},
+{
+  "name": "Update Product",
+  "request": {
+    "method": "PUT",
+    "header": [{ "key": "Content-Type", "value": "application/json" }],
+    "body": {
+      "mode": "raw",
+      "raw": "{ \"name\": \"Product A Updated\", \"price\": 14.99 }"
+    },
+    "url": {
+      "raw": "http://127.0.0.1:5000/api/products/:product_id",
+      "protocol": "http",
+      "host": ["127.0.0.1"],
+      "port": "5000",
+      "path": ["api","products",":product_id"],
+      "variable": [{ "key": "product_id", "value": "1", "description": "ID товару" }]
+    },
+    "description": "Оновити товар за ID."
+  },
+  "response": [
+    {
+      "name": "updated",
+      "status": "OK",
+      "code": 200,
+      "_body": "{ \"status\": \"success\", \"message\": \"Product updated\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "not found",
+      "status": "Not Found",
+      "code": 404,
+      "_body": "{ \"status\": \"error\", \"message\": \"Product not found\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "server error",
+      "status": "Internal Server Error",
+      "code": 500,
+      "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    }
+  ]
+},
+{
+  "name": "Delete Product",
+  "request": {
+    "method": "DELETE",
+    "header": [],
+    "url": {
+      "raw": "http://127.0.0.1:5000/api/products/:product_id",
+      "protocol": "http",
+      "host": ["127.0.0.1"],
+      "port": "5000",
+      "path": ["api","products",":product_id"],
+      "variable": [{ "key": "product_id", "value": "1", "description": "ID товару" }]
+    },
+    "description": "Видалити товар за ID."
+  },
+  "response": [
+    {
+      "name": "deleted",
+      "status": "OK",
+      "code": 200,
+      "_body": "{ \"status\": \"success\", \"message\": \"Product deleted\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "not found",
+      "status": "Not Found",
+      "code": 404,
+      "_body": "{ \"status\": \"error\", \"message\": \"Product not found\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    },
+    {
+      "name": "server error",
+      "status": "Internal Server Error",
+      "code": 500,
+      "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+      "header": [{ "key": "Content-Type", "value": "application/json" }]
+    }
+  ]
+},
+    {
       "name": "Create Order",
       "request": {
         "method": "POST",
@@ -60,6 +223,20 @@
           "code": 201,
           "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Order created\"\n}",
           "header": [{"key":"Content-Type","value":"application/json"}]
+        },
+        {
+          "name": "invalid input",
+          "code": 400,
+          "status": "Bad Request",
+          "_body": "{\n  \"status\": \"error\",\n  \"message\": \"Validation error\",\n  \"errors\": {\n    \"email\": \"Not a valid email address\",\n    \"address\": \"Too short, minimum 5 characters\",\n    \"cart\": \"Must not be empty\"\n  }\n}",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
+        },
+        {
+          "name": "server error",
+          "status": "Internal Server Error",
+          "code": 500,
+          "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
         }
       ]
     },
@@ -77,7 +254,22 @@
         },
         "description": "Отримати список всіх замовлень."
       },
-      "response": []
+      "response": [
+        {
+          "name": "ok",
+          "status": "OK",
+          "code": 200,
+          "_body": "{ \"status\": \"success\", \"orders\": [ { \"id\": 1, \"email\": \"user@example.com\", \"status\": \"pending\" } ] }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
+        },
+        {
+          "name": "server error",
+          "status": "Internal Server Error",
+          "code": 500,
+          "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
+        }
+      ]
     },
     {
       "name": "Get Order by ID",
@@ -110,6 +302,13 @@
           "code": 404,
           "_body": "{\n  \"status\": \"error\",\n  \"message\": \"Order not found\"\n}",
           "header": [{"key":"Content-Type","value":"application/json"}]
+        },
+        {
+          "name": "server error",
+          "status": "Internal Server Error",
+          "code": 500,
+          "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
         }
       ]
     },
@@ -130,14 +329,35 @@
         "description": "Оновити статус замовлення. Тіло JSON: {\"status\": \"...\"}."
       },
       "response": [
-        {
-          "name": "updated",
-          "status": "OK",
-          "code": 200,
-          "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Status updated\"\n}",
-          "header": [{"key":"Content-Type","value":"application/json"}]
-        }
-      ]
+      {
+        "name": "updated",
+        "status": "OK",
+        "code": 200,
+        "_body": "{ \"status\": \"success\", \"message\": \"Status updated\" }",
+        "header": [{ "key": "Content-Type", "value": "application/json" }]
+      },
+      {
+        "name": "invalid status",
+        "status": "Bad Request",
+        "code": 400,
+        "_body": "{ \"status\": \"error\", \"message\": \"Invalid status\" }",
+        "header": [{ "key": "Content-Type", "value": "application/json" }]
+      },
+      {
+        "name": "not found",
+        "status": "Not Found",
+        "code": 404,
+        "_body": "{ \"status\": \"error\", \"message\": \"Order not found\" }",
+        "header": [{ "key": "Content-Type", "value": "application/json" }]
+      },
+      {
+        "name": "server error",
+        "status": "Internal Server Error",
+        "code": 500,
+        "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+        "header": [{ "key": "Content-Type", "value": "application/json" }]
+      }
+    ]
     },
     {
       "name": "Delete Order",
@@ -161,6 +381,20 @@
           "code": 200,
           "_body": "{\n  \"status\": \"success\",\n  \"message\": \"Order deleted\"\n}",
           "header": [{"key":"Content-Type","value":"application/json"}]
+        },
+        {
+          "name": "not found",
+          "status": "Not Found",
+          "code": 404,
+          "_body": "{ \"status\": \"error\", \"message\": \"Order not found\" }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
+        },
+        {
+          "name": "server error",
+          "status": "Internal Server Error",
+          "code": 500,
+          "_body": "{ \"status\": \"error\", \"message\": \"Internal server error\" }",
+          "header": [{ "key": "Content-Type", "value": "application/json" }]
         }
       ]
     }

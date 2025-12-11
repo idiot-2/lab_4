@@ -1,39 +1,83 @@
 from flask import Blueprint, jsonify, request
 from flasgger import swag_from
 from models import (
-        get_products, add_order, get_orders, get_order_details,
-        update_order_status, delete_order
+    get_products, get_product_by_id, create_product, update_product, delete_product,
+    add_order, get_orders, get_order_details, update_order_status, delete_order
 )
 
-
-api_bp = Blueprint('api', __name__, url_prefix="/api")
-
+api_v1_bp = Blueprint('api_v1', __name__, url_prefix="/api/v1")
 
 # -------------------------------
-# 1) Отримати всі товари
+# 1.1) Отримати всі товари
 # -------------------------------
-@api_bp.get("/products")
+@api_v1_bp.get("/products")
 @swag_from({
-        'tags': ['Products'],
-        'responses': {
-                200: {
-                        'description': 'A list of products'
-                },
-                500: {'description': 'Server error'}
-        }
+    'tags': ['Products'],
+    'responses': {
+        200: {'description': 'A list of products'},
+        500: {'description': 'Server error'}
+    }
 })
 def api_get_products():
-        try:
-                products = get_products()
-                return jsonify({"status": "success", "data": products}), 200
-        except Exception as e:
-                return jsonify({"status": "error", "message": str(e)}), 500
+    try:
+        products = get_products()
+        return jsonify({"status": "success", "data": products}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# -------------------------------
+# 1.2) Отримати товар за ID
+# -------------------------------
+@api_v1_bp.get("/products/<int:product_id>")
+def api_get_product(product_id):
+    product = get_product_by_id(product_id)
+    if product:
+        return jsonify({"status": "success", "product": product}), 200
+    return jsonify({"status": "error", "message": "Product not found"}), 404
+
+
+# -------------------------------
+# 1.3) Створити новий товар
+# -------------------------------
+@api_v1_bp.post("/products")
+def api_create_product():
+    data = request.json
+    if not data or "name" not in data or "price" not in data:
+        return jsonify({"status": "error", "message": "Invalid input"}), 400
+    product_id = create_product(data["name"], data["price"], data.get("image"))
+    return jsonify({"status": "success", "message": "Product created", "id": product_id}), 201
+
+
+# -------------------------------
+# 1.4) Оновити товар
+# -------------------------------
+@api_v1_bp.put("/products/<int:product_id>")
+def api_update_product(product_id):
+    data = request.json
+    updated = update_product(product_id, data.get("name"), data.get("price"), data.get("image"))
+    if updated:
+        return jsonify({"status": "success", "message": "Product updated"}), 200
+    return jsonify({"status": "error", "message": "Product not found"}), 404
+
+
+# -------------------------------
+# 1.5) Видалити товар
+# -------------------------------
+@api_v1_bp.delete("/products/<int:product_id>")
+def api_delete_product(product_id):
+    deleted = delete_product(product_id)
+    if deleted:
+        return jsonify({"status": "success", "message": "Product deleted"}), 200
+    return jsonify({"status": "error", "message": "Product not found"}), 404
+
+
 
 
 # -------------------------------
 # 2) Створити нове замовлення
 # -------------------------------
-@api_bp.post("/orders")
+@api_v1_bp.post("/orders")
 @swag_from({
         'tags': ['Orders'],
         'requestBody': {
@@ -70,7 +114,7 @@ def api_create_order():
 # -------------------------------
 # 3) Отримати всі замовлення
 # -------------------------------
-@api_bp.get("/orders")
+@api_v1_bp.get("/orders")
 @swag_from({
         'tags': ['Orders'],
         'responses': {200: {'description': 'List of orders'}, 500: {'description': 'Server error'}}
@@ -86,7 +130,7 @@ def api_get_all_orders():
 # -------------------------------
 # 4) Отримати конкретне замовлення
 # -------------------------------
-@api_bp.get("/orders/<int:order_id>")
+@api_v1_bp.get("/orders/<int:order_id>")
 @swag_from({
         'tags': ['Orders'],
         'parameters': [
@@ -109,7 +153,7 @@ def api_get_order(order_id):
 # -------------------------------
 # 5) Оновити статус замовлення
 # -------------------------------
-@api_bp.put("/orders/<int:order_id>")
+@api_v1_bp.put("/orders/<int:order_id>")
 @swag_from({
         'tags': ['Orders'],
         'parameters': [
@@ -132,7 +176,7 @@ def api_update_order(order_id):
 # -------------------------------
 # 6) Видалити замовлення
 # -------------------------------
-@api_bp.delete("/orders/<int:order_id>")
+@api_v1_bp.delete("/orders/<int:order_id>")
 @swag_from({
         'tags': ['Orders'],
         'parameters': [
