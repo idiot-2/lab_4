@@ -60,6 +60,9 @@ def register():
                 error = 'Користувач з таким ім\'ям або email вже існує.'
     return render_template('register.html', error=error)
 
+@app.route("/api-demo")
+def api_demo():
+    return render_template("api-demo.html")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
