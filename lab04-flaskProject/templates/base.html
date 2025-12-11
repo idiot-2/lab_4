@@ -65,18 +65,33 @@
                     </div>
                 </button>
                 
-                <ul id="menu" class="hidden w-full lg:flex lg:w-auto lg:space-x-6 flex-col lg:flex-row mt-4 lg:mt-0">
-                    <li><a href="{{ url_for('home') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Головна</a></li>
-                    <li><a href="{{ url_for('shop.shop') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Магазин</a></li>
-                    <li><a href="{{ url_for('shop.cart') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Кошик</a></li>
-                    <li><a href="{{ url_for('about') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Про нас</a></li>
-                    <li><a href="{{ url_for('feedback.feedback') }}" class="block py-2 lg:py-0 hover:text-purple-300 transition duration-300">Зворотній зв'язок</a></li>
+                <ul id="menu" class="hidden w-full lg:flex lg:w-auto lg:space-x-4 flex-col lg:flex-row mt-4 lg:mt-0">
+                    <li><a href="{{ url_for('home') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Головна</a></li>
+                    <li><a href="{{ url_for('shop.shop') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Магазин</a></li>
+                    <li><a href="{{ url_for('shop.cart') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Кошик</a></li>
+                    <li><a href="{{ url_for('about') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Про нас</a></li>
+                    <li><a href="{{ url_for('feedback.feedback') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Зворотній зв'язок</a></li>
+                    <li><a href="{{ url_for('dot.dot') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Точка</a></li>
+                    {% if session.get('username') %}
+                        <li class="flex items-center px-3 py-2 text-sm">
+                            <span class="mr-3">Увійшли як <strong>{{ session.get('username') }}</strong></span>
+                            <a href="{{ url_for('logout') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Вийти</a>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ url_for('register') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Зареєструватися</a></li>
+                        <li><a href="{{ url_for('login') }}" class="inline-flex items-center px-3 py-2 bg-transparent hover:bg-purple-800/20 rounded transition duration-300">Увійти</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-8">
+        {# Flash messages removed per user request: no notifications #}
+
+        <!-- Page-level CTA block (e.g., add a register button on certain pages) -->
+        {% block page_cta %}{% endblock %}
+
         <div class="card-dark shadow-md rounded-lg p-6">
             {% block content %}{% endblock %}
         </div>
@@ -84,7 +99,7 @@
 
     <footer class="bg-black text-white py-4 mt-auto border-t-2 border-purple-600">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Мій проєкт. Всі права захищені.</p>
+            <p>&copy; 2025 Наш проєкт. Всі права захищені.</p>
         </div>
     </footer>
 
