@@ -187,3 +187,33 @@ def api_update_order(order_id):
 def api_delete_order(order_id):
         delete_order(order_id)
         return jsonify({"status": "success", "message": "Order deleted"}), 200
+
+
+
+# -------------------------------
+# 7) Реєстрація користувача (v1 — мінімальна)
+# -------------------------------
+@api_v1_bp.post("/register")
+def api_register_user_v1():
+    data = request.json
+
+    # Проверка обязательных полей
+    if not data or "email" not in data or "password" not in data:
+        return jsonify({"status": "error", "message": "Missing fields"}), 400
+
+    return jsonify({"status": "success", "message": "User registered"}), 201
+
+
+
+# -------------------------------
+# 8) Логін користувача (v1 — мінімальний)
+# -------------------------------
+@api_v1_bp.post("/login")
+def api_login_user_v1():
+    data = request.json
+
+    # Перевірка обов'язкових полів
+    if not data or "email" not in data or "password" not in data:
+        return jsonify({"status": "error", "message": "Missing fields"}), 400
+
+    return jsonify({"status": "success", "message": "Login successful"}), 200
