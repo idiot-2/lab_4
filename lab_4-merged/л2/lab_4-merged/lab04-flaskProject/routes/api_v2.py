@@ -147,3 +147,49 @@ def api_delete_order_v2(order_id):
 
 
 
+# -------------------------------
+# 7) Реєстрація користувача (валідація email + пароль)
+# -------------------------------
+@api_v2_bp.post("/register")
+def api_register_user_v2():
+    data = request.json
+
+    if not data or "email" not in data or "password" not in data:
+        return jsonify({"status": "error", "message": "Missing fields"}), 400
+
+    email = data["email"]
+    password = data["password"]
+
+    # Валідація email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"status": "error", "message": "Invalid email format"}), 400
+
+    # Валідація пароля
+    if len(password) < 6:
+        return jsonify({"status": "error", "message": "Password too short"}), 400
+
+    # Тут можна зберегти користувача в базу (поки просто успіх)
+    return jsonify({"status": "success", "message": "User registered"}), 201
+
+
+# -------------------------------
+# 8) Логін користувача (перевірка email + пароль)
+# -------------------------------
+@api_v2_bp.post("/login")
+def api_login_user_v2():
+    data = request.json
+
+    if not data or "email" not in data or "password" not in data:
+        return jsonify({"status": "error", "message": "Missing fields"}), 400
+
+    email = data["email"]
+    password = data["password"]
+
+    # Тут має бути перевірка з базою даних
+    # Для прикладу — простий хардкод:
+    if email == "user@example.com" and password == "test123":
+        return jsonify({"status": "success", "message": "Login successful"}), 200
+    else:
+        return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+
