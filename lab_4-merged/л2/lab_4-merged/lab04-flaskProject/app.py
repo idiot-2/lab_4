@@ -59,6 +59,10 @@ app.register_blueprint(errors_bp)   # <-- errors
 def home():
     return render_template('home.html')
 
+@app.route("/api-demo")
+def api_demo():
+    return render_template("api-demo.html")
+
 @app.route('/about')
 def about():
     return render_template('about.html')
