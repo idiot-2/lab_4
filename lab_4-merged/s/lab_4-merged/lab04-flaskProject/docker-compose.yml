@@ -1,8 +1,9 @@
-version: "3.9"
-
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flask_lab4_image
     container_name: flask_lab4
     ports:
       - "5000:5000"
