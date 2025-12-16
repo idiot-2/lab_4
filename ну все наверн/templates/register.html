@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Реєстрація{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Реєстрація</h1>
+    {% if error %}
+    <div class="mb-4 p-3 rounded bg-red-900 text-red-100">{{ error }}</div>
+    {% endif %}
+<form method="post" class="space-y-4">
+    <div>
+        <input type="text" name="username" placeholder="Ім'я користувача" required class="w-full p-2 rounded border" />
+    </div>
+    <div>
+        <input type="email" name="email" placeholder="Email" required class="w-full p-2 rounded border" />
+    </div>
+    <div>
+        <input type="password" name="password" placeholder="Пароль" required class="w-full p-2 rounded border" />
+    </div>
+    <div>
+        <input type="password" name="confirm_password" placeholder="Підтвердіть пароль" required class="w-full p-2 rounded border" />
+    </div>
+
+    <div id="log&reg" class="flex justify-between items-center gap-4">
+        <button type="submit" class="Pknopk">Зареєструватися</button>
+        
+        {% if not session.get('username') %}
+        <a href="{{ url_for('login') }}"class="knopk">Увійти</a>
+        {% endif %}
+    </div>
+</form>
+
+    
+
+
+
+{% endblock %}

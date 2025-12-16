@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="uk" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мій проєкт{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+
+
+        /* скрываем сам скроллбар */
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+
+
+
+        .wrap-text {
+            word-wrap: break-word;      /* Для старых браузеров */
+            overflow-wrap: break-word;  /* Стандартное свойство */
+            hyphens: auto;              /* Автоматический перенос (опционально) */
+        }
+
+
+
+
+        .bar {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Dark theme: black background, light text */
+        body {
+            background-color: #000000;
+            color: #e6e6e6;
+        }
+
+        /* Make default borders purple */
+        .border {
+            border-color: #7c3aed !important; /* Tailwind purple-600 */
+        }
+
+        /* Inputs, textareas and selects: purple border + purple focus glow */
+        input, textarea, select {
+            border-color: #7c3aed;
+            background-color: #070707;
+            color: #e6e6e6;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        input:focus, textarea:focus, select:focus, button:focus {
+            outline: none;
+            border-color: #7c3aed !important;
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.18) !important;
+        }
+
+        /* Override Tailwind's shadow-outline to purple when present */
+        .shadow-outline {
+            box-shadow: 0 0 0 3px rgba(124,58,237,0.18) !important;
+        }
+
+        /* Make cards and panels dark with purple border */
+        .card-dark {
+            background-color: #070707;
+            border: 1px solid #7c3aed;
+            color: #e6e6e6;
+        }
+
+
+        /* Light theme overrides when body has class 'light' */
+        body.light {
+            background-color: #ffffff;
+            color: #111827;
+            transition: 500ms;
+        }
+
+        body.light input, body.light textarea, body.light select {
+            background-color: #ffffff;
+            color: #111827;
+            border-color: #cbd5e1;
+        }
+
+        .light .card-dark {
+            background-color: #ffffff;
+            border-color: #7c3aed;
+            color: #111827;
+        }
+
+        .light .bar {
+            background-color: #111827 !important;
+        }
+
+
+
+        /* Убираем обводку/тень у кнопки переключения темы (переопределяем общий селектор выше) */
+        #theme-toggle {
+            outline: none;
+            border: none;
+            box-shadow: none !important;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tab-content {
+            display: block;
+        }
+
+        .tab-content.hidden {
+            display: none;
+        }
+
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #d1d5db;
+        }
+
+        .star.text-yellow-500 {
+            color: #fbbf24;
+        }
+
+        #theme-toggle:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+
+        #profile {
+            border: none;
+            outline: none; 
+        }
+
+
+
+
+/*  knopk клас для кнопок серых  */
+        .knopk {
+            padding: 0.3rem 1rem;
+            background-color: grey; 
+            border-radius: 0.25rem; 
+            color: #ffffff;
+            transition: background-color 0.3s; 
+        }
+
+        .knopk:hover {
+            background-color: rgba(126, 34, 206, 0.527);
+        }
+
+
+        .light .knopk:hover {
+            background-color: #a55ce9;
+        }
+
+
+        .light .knopk {
+            background-color: rgb(189, 189, 189);
+            color: #000000;
+        }
+
+/*  Pknopk клас для фиолетоывых кнопок  */
+
+        .Pknopk {
+            padding: 0.5rem 1rem;
+            background-color: #9333ea;
+            border-radius: 0.25rem;
+            color: #ffffff;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .Pknopk:hover {
+            background-color: #7e22ce;
+        }
+
+
+/*  Xknopk клас для кнопок в шапке */
+
+        .Xknopk {
+            background-color: none;
+            border: solid #ff000000;
+            border-radius: 0.25rem;
+            outline: 2px solid transparent;
+            outline-offset: 5px;
+        }
+
+        .Xknopk:hover {
+            border-radius: 7px;
+            outline-color: #7c3aed93;
+            transition: 500ms;
+        }
+
+
+
+
+
+/*   Wknopk  Головна кнопка "Наш проєкт"*/
+        .Wknopk {
+              font-size: 1.5rem;          /* text-2xl → ~24px */
+              line-height: 2rem;          /* соответствует Tailwind для text-2xl */
+              font-weight: 700;           /* font-bold */
+              transition: color 0.3s;     /* transition duration-300 */
+        }
+
+        .Wknopk:hover {
+              color: #d8b4fe;             /* hover:text-purple-300 */
+              transition: 500ms;
+        }
+
+
+
+
+
+
+
+/*  ну где текст вводить над вот да для него крч*/
+        .InputText {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid #7c3aed;
+            border-radius: 0.25rem;
+            color:rgb(165, 165, 165);
+        }
+
+        /* Стиль для плейсхолдера  */
+        .InputText::-webkit-input-placeholder {
+            color: rgb(165, 165, 165);
+        }
+
+
+        .light .InputText {
+            color: rgba(32, 32, 32, 0.966);
+            border: 1px solid #4b2194;
+        }
+
+        /* Стиль для плейсхолдера в светлой теме */
+        .light .InputText::placeholder {
+            color: rgba(32, 32, 32, 0.966);
+        }
+
+
+
+
+
+/*  ну для рецензий крч */
+        .texts {
+            color: #000000;
+        }
+
+
+
+
+
+
+
+
+        .confirmtext {
+            color:white;
+        }
+        .light .confirmtext {
+            color:#000000;
+        }
+
+        .modal-confirm {
+            padding: 1.5rem; 
+            border-radius: 0.5rem;    
+            width: 100%;            
+            max-width: 24rem;     
+            border: 2px solid #9333ea;  
+            background-color: #000000;
+        }
+        .light .modal-confirm {
+            background-color: white;
+        }
+
+
+
+
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+
+
+
+
+
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-black text-white font-sans leading-normal tracking-normal pt-24">
+    <header class="bg-black text-white shadow-lg border-b-2 border-purple-600 fixed top-0 left-0 right-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex flex-wrap justify-between items-center">
+                <div class="absolute left-4 top-1/2 transform -translate-y-1/2">
+                    <button id="theme-toggle" class="p-2 rounded-md focus:outline-none bg-transparent" aria-label="Переключити тему">
+                        <img id="theme-img" src="/img/dark.png" data-dark="/img/dark.png" data-light="/img/white.png" alt="theme" class="h-10 w-10 object-contain" />
+                    </button>
+                </div>
+                <a href="{{ url_for('home') }}" class="Wknopk">Наш проєкт</a>
+                
+                <button id="menu-toggle" class="lg:hidden focus:outline-none" aria-label="Відкрити меню">
+                    <div class="w-6 h-6 relative">
+                        <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out"></span>
+                        <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out mt-2"></span>
+                        <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out mt-4"></span>
+                    </div>
+                </button>
+                
+                <ul id="menu" class="flex w-full lg:w-auto lg:space-x-4 flex-col lg:flex-row mt-4 lg:mt-0">
+                    <li><a href="{{ url_for('home') }}" class="Xknopk">Головна</a></li>
+                    <li><a href="{{ url_for('shop.shop') }}" class="Xknopk">Магазин</a></li>
+                    <li><a href="{{ url_for('shop.cart') }}" class="Xknopk">Кошик</a></li>
+                    <li><a href="{{ url_for('about') }}" class="Xknopk">Про нас</a></li>
+                    <li><a href="{{ url_for('feedback.feedback') }}" class="Xknopk">Зворотній зв'язок</a></li>
+                    <li><a href="{{ url_for('dot.dot') }}" class="Xknopk">Точка</a></li>
+
+                    {% if session.get('username') %}
+                    <li><a href="{{ url_for('account') }}" class="Xknopk"><strong>{{ session.get('username') }}</strong></a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('login') }}" class="Xknopk">Увійти</a></li>
+                    {% endif %}
+
+               </ul>
+            </div>
+        </nav>
+    </header>
+
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        {# Flash messages removed per user request: no notifications #}
+
+        <!-- Page-level CTA block (e.g., add a register button on certain pages) -->
+        {% block page_cta %}{% endblock %}
+
+        <div class="card-dark shadow-md rounded-lg p-6">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-4 mt-auto border-t-2 border-purple-600">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Наш проєкт. Всі права захищені.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+            const bars = menuToggle.querySelectorAll('.bar');
+
+            menuToggle.addEventListener('click', function() {
+                menu.classList.toggle('hidden');
+                menu.classList.toggle('lg:flex');
+                bars[0].classList.toggle('rotate-45');
+                bars[0].classList.toggle('translate-y-2');
+                bars[1].classList.toggle('opacity-0');
+                bars[2].classList.toggle('-rotate-45');
+                bars[2].classList.toggle('-translate-y-2');
+                
+                if (menu.classList.contains('hidden')) {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.setAttribute('aria-label', 'Відкрити меню');
+                } else {
+                    menuToggle.setAttribute('aria-expanded', 'true');
+                    menuToggle.setAttribute('aria-label', 'Закрити меню');
+                }
+            });
+
+            // Закриваємо меню при кліку поза ним на мобільних пристроях
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth < 1024) { // lg breakpoint
+                    const isClickInside = menu.contains(event.target) || menuToggle.contains(event.target);
+                    if (!isClickInside && !menu.classList.contains('hidden')) {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('lg:flex');
+                        bars[0].classList.remove('rotate-45', 'translate-y-2');
+                        bars[1].classList.remove('opacity-0');
+                        bars[2].classList.remove('-rotate-45', '-translate-y-2');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.setAttribute('aria-label', 'Відкрити меню');
+                    }
+                }
+            });
+
+            // Перевіряємо розмір вікна при завантаженні та зміні розміру
+            function checkWindowSize() {
+                if (window.innerWidth >= 1024) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('lg:flex');
+                } else {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('lg:flex');
+                }
+            }
+
+            window.addEventListener('resize', checkWindowSize);
+            checkWindowSize(); // Викликаємо функцію при завантаженні сторінки
+        });
+
+        // Theme toggle and images modal
+        (function() {
+            function applyTheme(isLight) {
+                const themeImg = document.getElementById('theme-img');
+                if (isLight) {
+                    document.documentElement.classList.add('light-theme');
+                    document.body.classList.add('light');
+                    if (themeImg && themeImg.dataset && themeImg.dataset.light) themeImg.src = themeImg.dataset.light;
+                } else {
+                    document.documentElement.classList.remove('light-theme');
+                    document.body.classList.remove('light');
+                    if (themeImg && themeImg.dataset && themeImg.dataset.dark) themeImg.src = themeImg.dataset.dark;
+                }
+            }
+
+            // Initialize theme from localStorage
+            const saved = localStorage.getItem('site-theme');
+            const isLight = saved === 'light';
+            applyTheme(isLight);
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const nowLight = !document.body.classList.contains('light');
+                    applyTheme(nowLight);
+                    localStorage.setItem('site-theme', nowLight ? 'light' : 'dark');
+                });
+            }
+
+            // No images button anymore — theme button only
+        })();
+    </script>
+</body>
+</html>
