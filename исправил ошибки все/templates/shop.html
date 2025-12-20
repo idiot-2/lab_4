@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block title %}Магазин{% endblock %}
+{% block content %}
+
+
+<div class="zacrep">
+<div class="mb-4 flex items-center justify-between adminpanel-txt">
+    <div class="flex items-center space-x-4">
+        <h1 class="text-3xl font-bold">Магазин</h1>
+        <div class="flex items-center">
+            <button onclick="showTab('products')" class="knopk mr-2" id="products-tab">Товари</button>
+            <button onclick="showTab('reviews')" class="knopk" id="reviews-tab">Рецензії</button>
+        </div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <form id="filter-form" class="flex items-center space-x-1 text-sm" onsubmit="event.preventDefault(); loadProducts();">
+        <input type="text" id="q" placeholder="Пошук" class="InputText" oninput="loadProducts()" onkeydown="if(event.key === 'Enter') loadProducts()">
+        <div id="price-filter" class="flex items-center space-x-1">
+          <input type="number" id="min_price" placeholder="Від" min="0" class="InputText" style="width: 70px;" oninput="loadProducts()">
+          <input type="number" id="max_price" placeholder="До" min="0" class="InputText" style="width: 70px;" oninput="loadProducts()">
+        </div>
+        <button type="button" onclick="toggleFilter()" class="knopk flex-none">Сегмент вартостi</button>
+      </form>
+    </div>
+</div>
+</div>
+
+<div id="products-content" class="tab-content adminpanel-txt">
+  <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  </div>
+</div>
+
+<div id="reviews-content" class="tab-content hidden">
+  <div class="mb-4">
+    <h2 class="text-xl font-bold mb-2">Залишити рецензію</h2>
+    <form id="review-form" class="space-y-2">
+      <div class="flex flex-col space-y-2">
+          <input type="text" id="review-name" placeholder="Ваше ім'я" class="InputText w-full" required value="{{ session.get('username') or '' }}">
+          <select id="review-game" class="InputText w-full" required>
+            <option value="">Оберіть гру</option>
+          </select>
+      </div>
+      <div class="flex items-center">
+        <span class="mr-2">Оцінка:</span>
+        <div id="rating-stars" class="flex">
+          <span class="star" data-rating="1">★</span>
+          <span class="star" data-rating="2">★</span>
+          <span class="star" data-rating="3">★</span>
+          <span class="star" data-rating="4">★</span>
+          <span class="star" data-rating="5">★</span>
+        </div>
+        <input type="hidden" id="review-rating" required>
+      </div>
+      <textarea id="review-message" placeholder="Ваше повідомлення" class="InputText w-full" required></textarea>
+      <button type="submit" class="knopk">Надіслати</button>
+    </form>
+  </div>
+  <button onclick="loadReviews()" class="knopk mb-4">Перезавантажити рецензії</button>
+  <div id="reviews-list"></div>
+</div>
+
+<script>
+let currentTab = 'products';
+let selectedRating = 0;
+let filterTimeout;
+
+function showTab(tab) {
+  const activeTabId = tab + '-tab';
+  const inactiveTabId = (tab === 'products' ? 'reviews' : 'products') + '-tab';
+
+  document.getElementById(tab + '-content').classList.remove('hidden');
+  document.getElementById(inactiveTabId.replace('-tab', '-content')).classList.add('hidden');
+
+  document.getElementById(activeTabId).classList.add('active-knopk');
+  document.getElementById(activeTabId).classList.remove('inactive-knopk');
+  document.getElementById(inactiveTabId).classList.add('inactive-knopk');
+  document.getElementById(inactiveTabId).classList.remove('active-knopk');
+
+  currentTab = tab;
+  if (tab === 'products') { loadProducts(); } 
+  else if (tab === 'reviews') { loadReviews(); loadGamesForReview(); }
+}
+
+function toggleFilter() {
+  const filterBlock = document.getElementById("price-filter");
+  filterBlock.classList.toggle("hidden");
+  loadProducts();
+}
+
+function loadProducts() {
+  clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(() => {
+    const q = document.getElementById('q').value;
+    const minPrice = document.getElementById('min_price').value;
+    const maxPrice = document.getElementById('max_price').value;
+    const usePriceFilter = !document.getElementById('price-filter').classList.contains('hidden') ? '1' : '0';
+
+    const params = new URLSearchParams({
+      q: q, min_price: minPrice, max_price: maxPrice,
+      use_price_filter: usePriceFilter, sort_order: 'asc' 
+    });
+
+    fetch(`/api/v2/products?${params}`)
+      .then(response => response.json())
+      .then(data => {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = '';
+        data.data.forEach(product => {
+          const imageSrc = product.image || '/img/dark.png';
+          // Проверяем, добавлен ли товар в избранное (нужна поддержка в API поле is_wishlisted)
+          const wishClass = product.is_wishlisted ? 'wish-active' : '';
+          
+          const div = document.createElement('div');
+          div.className = 'bg-white p-4 shadow-md rounded-lg relative group overflow-hidden';
+          div.innerHTML = `
+            <div class="relative">
+                <img src="${imageSrc}" alt="${product.name}" class="img-blur w-full h-48 object-cover mb-2 transition duration-300"/>
+                
+                <!-- Кнопка купить через AJAX -->
+                <div onclick="apiCart(${product.id})" class="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer">
+                    <span class="text-white font-bold border border-white px-4 py-2">Купити</span>
+                </div>
+
+                <!-- Сердечко с переключением (Toggle) -->
+                <button onclick="toggleWish(event, ${product.id}, this)" class="absolute top-2 right-2 bg-white/80 text-red-500 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 shadow-sm ${wishClass}">
+                  ♥
+                </button>
+            </div>
+            <h2 class="text-black font-bold">${product.name}</h2>
+            <p class="text-purple-600">${product.price} грн</p>
+          `;
+          grid.appendChild(div);
+        });
+      })
+      .catch(error => console.error('Error loading products:', error));
+  }, 300);
+}
+
+// Функции запросов без перезагрузки
+function apiCart(id) {
+    fetch(`/add_to_cart/${id}`);
+}
+
+function toggleWish(event, id, btn) {
+    event.stopPropagation();
+    const isAdded = btn.classList.contains('wish-active');
+    const url = isAdded ? `/remove_from_wishlist/${id}` : `/add_to_wishlist/${id}`;
+    
+    fetch(url).then(res => {
+        if(res.ok) btn.classList.toggle('wish-active');
+    });
+}
+
+function loadReviews() {
+  fetch('/api/v2/reviews')
+    .then(response => response.json())
+    .then(data => {
+      const list = document.getElementById('reviews-list');
+      list.innerHTML = '';
+      data.data.forEach(review => {
+        const div = document.createElement('div');
+        div.className = 'review mb-4 p-4 border rounded shadow-sm';
+        div.innerHTML = `
+          <h3 class="texts" style="font-weight:bold;">${review.name} - ${review.game_title}</h3>
+          <p class="text-yellow-500">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</p>
+          <p class="texts">${review.message}</p>
+          <small class="texts">${new Date(review.created_at).toLocaleString()}</small>
+        `;
+        list.appendChild(div);
+      });
+    });
+}
+
+function loadGamesForReview() {
+  fetch('/api/v2/products')
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('review-game');
+      select.innerHTML = '<option value="">Оберіть гру</option>';
+      data.data.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.name;
+        option.textContent = product.name;
+        select.appendChild(option);
+      });
+    });
+}
+
+document.querySelectorAll('.star').forEach(star => {
+  star.addEventListener('click', function() {
+    selectedRating = parseInt(this.dataset.rating);
+    document.getElementById('review-rating').value = selectedRating;
+    updateStars();
+  });
+});
+
+function updateStars() {
+  document.querySelectorAll('.star').forEach((star, index) => {
+    if (index < selectedRating) {
+      star.classList.add('text-yellow-500');
+      star.classList.remove('text-gray-400');
+    } else {
+      star.classList.add('text-gray-400');
+      star.classList.remove('text-yellow-500');
+    }
+  });
+}
+
+document.getElementById('review-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('review-name').value;
+  const game = document.getElementById('review-game').value;
+  const rating = document.getElementById('review-rating').value;
+  const message = document.getElementById('review-message').value;
+
+  fetch('/api/v2/reviews', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, game_title: game, rating: parseInt(rating), message })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      loadReviews();
+      document.getElementById('review-form').reset();
+      selectedRating = 0;
+      updateStars();
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    showTab('products'); 
+});
+</script>
+{% endblock %}
