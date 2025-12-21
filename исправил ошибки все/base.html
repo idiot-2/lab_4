@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="uk" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Game shop{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+
+
+
+/*           Нумерация классов на сайте # номер                   */
+/*#1 body */
+/*#2 header */
+/*#3 контейнер для каждой вкладки */
+/*#4 кнопки */
+/*#5 поле ввода */
+/*#6 Админ панель */
+/*#7 ну всякое */
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#1*/
+body {
+    background-color: #000000;                    /* стандартный цвет фона */
+    transition: background-color 500ms ease;        /* плавный переход при смене темы */
+}
+
+body.light {
+    background-color: #ffffff;                     /* цвет фона в светлой теме */
+}
+
+
+        
+/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+/*#2*/
+/* Настройка шапки / header'а , footer*/
+.shapka {
+    background-color: #000000;               /* цвет фона */
+    color: #ffffff;                          /* цвет текста */
+
+    box-shadow: 0 10px 15px -3px rgb(147, 51, 234, 0.1);  /* тень от шапки */
+
+    border-bottom: 2px solid rgb(147, 51, 234, 100);        /* обводка-снизу толщина . тип . цвет */
+    
+    position: fixed;                           /* фиксированная позиция */         
+    top: 0;                                    /* позиция сверху */
+    left: 0;                                   /* позиция слева */
+    right: 0;                                  /* позиция справа */
+
+    z-index: 50;                               /* уровень наложения */
+}
+
+
+    /*   Wknopk  Головна кнопка "Game Shop" в шапке*/
+.Wknopk {
+    font-size: 1.5rem;          /* размер шрифта */
+    font-weight: 700;           /* толщина шрифта */
+    transition: color 500ms;    /* плавная смена цвета */
+}
+
+
+.Wknopk:hover {
+    color: #d8b4fe;            /* цвет при наведении */
+}
+
+    /*  Xknopk остальные кнопки в шапке "Головна","Магазин",...  */
+.Xknopk {
+    color: #ffffffa1;
+    border: solid transparent;                                                   /* создает прозрачную обводку для избежения смещения  */
+    border-radius: 7px;                                                          /* скругление углов */
+    outline: 2px solid transparent;                                              /* создает прозрачный outline для избежения смещения  */
+    outline-offset: 5px;                                                         /* отступ outline от элемента */
+    transition: outline-color 500ms ease-in-out, color 500ms ease-in-out;        /* плавная смена цвета outline */
+}
+
+.Xknopk:hover {
+    outline-color: #7c3aed93;                                    /* цвет outline при наведении */
+    color:#ffffff;
+}
+    /* Footer */
+.footer {
+  background-color: #000000;
+  color: #ffffff;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: auto;
+  border-top: 2px solid #9d46ee;
+  z-index: 50;
+}
+
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#3       Контейнер для каждой вкладки                          */
+.shablon {
+    background-color: #000000; /* стандартный цвет фона */
+    border: 2px solid #9333ea; /* ширина . тип . цвет обводки*/
+    padding: 1.5rem;             /* отступ от обводки */
+    border-radius: 0.5rem;       /* скругление углов */
+    color: #ffffff;            /* стандартный цвет текста внутри контейнера */
+}
+
+.light .shablon {
+    background-color: #ffffff;  /* цвет фона в светлой теме */
+    color: #000000;             /* цвет текста в светлой теме */
+}
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#4      классы для кнопок (Без W , X /knopk, они в шапке)      */
+/*  knopk клас для серых кнопок "не основные" */
+.knopk { /* черная тема */
+    padding: 0.5rem 1rem;                                   /* отступы сверху/снизу . справа/слева */
+    background-color: #4e4e4e;                            /* цвет фона */
+    border-radius: 0.5rem;                                  /* скругление углов */
+    border: 2px solid #ffffff;                            /* толщина . тип . цвет обводки */
+    border-top: transparent;                                /* отключает верхнуюю чать обводки */
+    color: #ffffff;                                       /* цвет текста */
+}
+
+.knopk:hover { /* при навидении курсора */
+    background-color: #9c9c9c;                             /* цвет фона */
+    border-color: transparent;                               /* отключение цвета обводки */
+    transition: background-color 300ms, border-color 100ms;  /* плавный переход фона и обводки */
+}
+
+.light .knopk { /* светлая тема */
+    background-color: rgb(223, 223, 223);                   /* отступы сверху/снизу . справа/слева */
+    border-color: #000000;                                  /* цвет обводки */
+    color: #000000;                                         /* цвет текста */
+}
+
+.light .knopk:hover { /* при навидении светлая тема */
+    background-color: rgb(192, 192, 192);                   /* цвет фона */
+    border-color: transparent;                                /* цвет обводки */
+    transition: background-color 300ms, border-color 100ms;   /* плавный переход фона и обводки */
+}
+
+
+    /*  Основные кнопки в большенстве для Подтверждения  */
+.Pknopk {   /* обычн */
+    padding: 0.5rem 1rem;                                      /* отступ */
+    background-color: #9333ea;                               /* цвет фона */
+    border-radius: 0.25rem;                                    /* скругление углов */
+    color: #ffffff;                                          /* цвет текста */
+    transition: background-color 0.2s ease-in-out;             /* плавный переход фона */
+}
+.Pknopk:hover { /* при навидении курсора */
+    background-color: #7e22ce;                                /* цвет фона */
+}
+
+    /* кглпки выбора поля такиие как товары . рецензии */
+.active-knopk {
+    background-color: #9c9c9c;
+    border-color: transparent;     
+}
+
+.active-knopk:hover {
+    padding: 0.5rem 1rem;                                   /* отступы сверху/снизу . справа/слева */
+    background-color: #4e4e4e;                            /* цвет фона */
+    border-radius: 0.5rem;                                  /* скругление углов */
+    border: 2px solid #ffffff;                            /* толщина . тип . цвет обводки */
+    border-top: transparent;                                /* отключает верхнуюю чать обводки */
+    color: #ffffff;                                       /* цвет текста */
+    transition: background-color 300ms, border-color 300ms;  
+}
+
+.light .active-knopk {
+    background-color: rgb(192, 192, 192);
+    border-color: transparent;
+}
+
+.light .active-knopk:hover {
+    background-color: rgb(223, 223, 223);
+    border-color: #000000;
+    color: #000000;
+    transition: background-color 300ms, border-color 300ms;
+}
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#5   поле ввода                                                */
+.InputText { /* черная тема */                               
+    padding: 0.25rem 0.5rem;                                     /* отступ */
+    border: 1px solid #9333ea;                                 /* обводка ширина . тип . цвет */
+    border-radius: 0.5rem;                                      /* скругление углов */
+    color:rgb(214, 214, 214);                                  /* цвет текста */
+    width: 100%;                                                 /* щирина поля */
+    padding: 0.5rem;                                             /* отступ */
+    background-color: black;                                   /* цвет фона */
+}
+
+
+.light .InputText { /* светлая тема */
+    color: rgb(0, 0, 0);                                       /* цвет текста */
+    background-color: rgb(255, 255, 255);                      /* цвет фона */
+}
+
+/* подсказка внутри поля */
+.InputText::-webkit-input-placeholder { /* черная тема */
+    color:rgb(214, 214, 214);                                  /* цвет текста*/
+}
+
+
+.light .InputText::-webkit-input-placeholder { /* светлая тема*/
+    color: rgb(0, 0, 0);                                       /* цвет текста*/
+}
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#6 Админ панель                                                */
+.admin-panel {
+    background-color: #9233ea5d;
+    border-color: #9233ea96;
+    border-width: 2px;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.light .admin-panel {
+    color: #000000;
+}
+
+
+
+/*///////////////////////////////////////////////////////////////*/
+/*#7   ну и всякое                                               */
+.zacrep { /* закрепление магазина при прокрутке вниз */
+    position: sticky;
+    top: 89.9px;
+    z-index: 50; 
+    background-color: #000000;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+
+.light .zacrep {
+    background-color: #ffffff;
+}
+
+.review {   /* настройка рецензий*/
+    background-color: #9233ea5d;
+    border-color: #9233ea96;
+    border-width: 2px;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* скрытие скроллбара */
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+/* перенос с новой строки и все такое */
+.wrap-text {
+    word-wrap: break-word;      /* Для старых браузеров */
+    overflow-wrap: break-word;  /* Стандартное свойство */
+    hyphens: auto;              /* Автоматический перенос (опционально) */
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+    color: #d1d5db;
+}
+
+.star.text-yellow-500 {
+    color: #fbbf24;
+}
+
+.wish-active {
+    background-color: #ef4444 !important;
+    color: white !important;
+}
+
+/* Блюр картинки при наведении на карточку */
+.group:hover .img-blur {
+    filter: blur(2px);
+}
+
+
+/* Плавный эффект масштабирования для кнопки вишлиста при наведении */
+.absolute.top-2.right-2:hover {
+    transform: scale(1.1);           /* Увеличивает кнопку на 10% */
+    transition: transform 0.1s ease; /* Делает анимацию плавной */
+}
+
+
+
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-black text-white font-sans leading-normal tracking-normal pt-24">
+    <header class="shapka">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between w-full">
+    
+
+                <div class="flex items-center gap-4"> 
+                    <button id="theme-toggle" class="p-2 rounded-md focus:outline-none bg-transparent" aria-label="Переключити тему">
+                        <img id="theme-img" src="/img/dark.png" data-dark="/img/dark.png" data-light="/img/white.png" alt="theme" class="h-10 w-10 object-contain" />
+                    </button>
+                    <a href="{{ url_for('home') }}" class="Wknopk">Game Shop</a>
+                </div>
+
+
+                <div class="flex items-center">
+                    <button id="menu-toggle" class="lg:hidden focus:outline-none" aria-label="Відкрити меню">
+                        <div class="w-6 h-6 relative">
+                            <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out"></span>
+                            <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out mt-2"></span>
+                            <span class="bar absolute h-0.5 w-6 bg-white transform transition duration-300 ease-in-out mt-4"></span>
+                        </div>
+                    </button>
+                    
+                    <ul id="menu" class="flex w-full lg:w-auto lg:space-x-4 flex-col lg:flex-row mt-4 lg:mt-0">
+                        <li><a href="{{ url_for('home') }}" class="Xknopk">Головна</a></li>
+                        <li><a href="{{ url_for('shop.shop') }}" class="Xknopk">Магазин</a></li>
+                        <li><a href="{{ url_for('shop.cart') }}" class="Xknopk">Кошик</a></li>
+                        <li><a href="{{ url_for('about') }}" class="Xknopk">Про нас</a></li>
+                        <li><a href="{{ url_for('feedback.feedback') }}" class="Xknopk">Зворотній зв'язок</a></li>
+                        <li><a href="{{ url_for('dot.dot') }}" class="Xknopk">Точка</a></li>
+                        {% if session.get('username') %}
+                        <li><a href="{{ url_for('account') }}" class="Xknopk"><strong>{{ session.get('username') }}</strong></a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('login') }}" class="Xknopk">Увійти</a></li>
+                        {% endif %}
+                </ul>
+            </div>
+        </div>
+        </nav>
+    </header>
+
+
+
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+        {# Flash messages removed per user request: no notifications #}
+
+        <!-- Page-level CTA block (e.g., add a register button on certain pages) -->
+        {% block page_cta %}{% endblock %}
+
+        <div class="shablon">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Game Shop. Всі права захищені.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+            const bars = menuToggle.querySelectorAll('.bar');
+
+            menuToggle.addEventListener('click', function() {
+                menu.classList.toggle('hidden');
+                menu.classList.toggle('lg:flex');
+                bars[0].classList.toggle('rotate-45');
+                bars[0].classList.toggle('translate-y-2');
+                bars[1].classList.toggle('opacity-0');
+                bars[2].classList.toggle('-rotate-45');
+                bars[2].classList.toggle('-translate-y-2');
+                
+                if (menu.classList.contains('hidden')) {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.setAttribute('aria-label', 'Відкрити меню');
+                } else {
+                    menuToggle.setAttribute('aria-expanded', 'true');
+                    menuToggle.setAttribute('aria-label', 'Закрити меню');
+                }
+            });
+
+            // Закриваємо меню при кліку поза ним на мобільних пристроях
+            document.addEventListener('click', function(event) {
+                if (window.innerWidth < 1024) { // lg breakpoint
+                    const isClickInside = menu.contains(event.target) || menuToggle.contains(event.target);
+                    if (!isClickInside && !menu.classList.contains('hidden')) {
+                        menu.classList.add('hidden');
+                        menu.classList.remove('lg:flex');
+                        bars[0].classList.remove('rotate-45', 'translate-y-2');
+                        bars[1].classList.remove('opacity-0');
+                        bars[2].classList.remove('-rotate-45', '-translate-y-2');
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.setAttribute('aria-label', 'Відкрити меню');
+                    }
+                }
+            });
+
+            // Перевіряємо розмір вікна при завантаженні та зміні розміру
+            function checkWindowSize() {
+                if (window.innerWidth >= 1024) {
+                    menu.classList.remove('hidden');
+                    menu.classList.add('lg:flex');
+                } else {
+                    menu.classList.add('hidden');
+                    menu.classList.remove('lg:flex');
+                }
+            }
+
+            window.addEventListener('resize', checkWindowSize);
+            checkWindowSize(); // Викликаємо функцію при завантаженні сторінки
+        });
+
+        // Theme toggle and images modal
+        (function() {
+            function applyTheme(isLight) {
+                const themeImg = document.getElementById('theme-img');
+                if (isLight) {
+                    document.documentElement.classList.add('light-theme');
+                    document.body.classList.add('light');
+                    if (themeImg && themeImg.dataset && themeImg.dataset.light) themeImg.src = themeImg.dataset.light;
+                } else {
+                    document.documentElement.classList.remove('light-theme');
+                    document.body.classList.remove('light');
+                    if (themeImg && themeImg.dataset && themeImg.dataset.dark) themeImg.src = themeImg.dataset.dark;
+                }
+            }
+
+            // Initialize theme from localStorage
+            const saved = localStorage.getItem('site-theme');
+            const isLight = saved === 'light';
+            applyTheme(isLight);
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const nowLight = !document.body.classList.contains('light');
+                    applyTheme(nowLight);
+                    localStorage.setItem('site-theme', nowLight ? 'light' : 'dark');
+                });
+            }
+
+            // No images button anymore — theme button only
+
+        animateTitle();
+        })();
+    </script>
+</body>
+</html>
