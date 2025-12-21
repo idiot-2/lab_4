@@ -67,15 +67,17 @@ body.light {
 
     /*  Xknopk остальные кнопки в шапке "Головна","Магазин",...  */
 .Xknopk {
-    border: solid transparent;                                    /* создает прозрачную обводку для избежения смещения  */
-    border-radius: 7px;                                           /* скругление углов */
-    outline: 2px solid transparent;                               /* создает прозрачный outline для избежения смещения  */
-    outline-offset: 5px;                                          /* отступ outline от элемента */
-    transition: outline-color 500ms ease-in-out;                  /* плавная смена цвета outline */
+    color: #ffffffa1;
+    border: solid transparent;                                                   /* создает прозрачную обводку для избежения смещения  */
+    border-radius: 7px;                                                          /* скругление углов */
+    outline: 2px solid transparent;                                              /* создает прозрачный outline для избежения смещения  */
+    outline-offset: 5px;                                                         /* отступ outline от элемента */
+    transition: outline-color 500ms ease-in-out, color 500ms ease-in-out;        /* плавная смена цвета outline */
 }
 
 .Xknopk:hover {
     outline-color: #7c3aed93;                                    /* цвет outline при наведении */
+    color:#ffffff;
 }
     /* Footer */
 .footer {
@@ -84,7 +86,8 @@ body.light {
   padding-top: 1rem;
   padding-bottom: 1rem;
   margin-top: auto;
-  border-top: 2px solid #9333ea;
+  border-top: 2px solid #9d46ee;
+  z-index: 50;
 }
 
 
@@ -122,7 +125,7 @@ body.light {
 .knopk:hover { /* при навидении курсора */
     background-color: #9c9c9c;                             /* цвет фона */
     border-color: transparent;                               /* отключение цвета обводки */
-    transition: background-color 300ms, border-color 300ms;  /* плавный переход фона и обводки */
+    transition: background-color 300ms, border-color 100ms;  /* плавный переход фона и обводки */
 }
 
 .light .knopk { /* светлая тема */
@@ -134,11 +137,11 @@ body.light {
 .light .knopk:hover { /* при навидении светлая тема */
     background-color: rgb(192, 192, 192);                   /* цвет фона */
     border-color: transparent;                                /* цвет обводки */
-    transition: background-color 300ms, border-color 300ms;   /* плавный переход фона и обводки */
+    transition: background-color 300ms, border-color 100ms;   /* плавный переход фона и обводки */
 }
 
 
-/*  Основные кнопки в большенстве для Подтверждения  */
+    /*  Основные кнопки в большенстве для Подтверждения  */
 .Pknopk {   /* обычн */
     padding: 0.5rem 1rem;                                      /* отступ */
     background-color: #9333ea;                               /* цвет фона */
@@ -150,7 +153,7 @@ body.light {
     background-color: #7e22ce;                                /* цвет фона */
 }
 
-/* кглпки выбора поля такиие как товары . рецензии */
+    /* кглпки выбора поля такиие как товары . рецензии */
 .active-knopk {
     background-color: #9c9c9c;
     border-color: transparent;     
@@ -284,12 +287,18 @@ input::-webkit-inner-spin-button {
     background-color: #ef4444 !important;
     color: white !important;
 }
+
 /* Блюр картинки при наведении на карточку */
 .group:hover .img-blur {
     filter: blur(2px);
 }
 
 
+/* Плавный эффект масштабирования для кнопки вишлиста при наведении */
+.absolute.top-2.right-2:hover {
+    transform: scale(1.1);           /* Увеличивает кнопку на 10% */
+    transition: transform 0.1s ease; /* Делает анимацию плавной */
+}
 
 
 

@@ -38,7 +38,6 @@
       </div>
 
       <div id="nickname" class="hidden">
-        <!-- Форма возвращена к стандартному POST запросу -->
         <form method="post" action="{{ url_for('change_name') }}" class="space-y-2">
           <p>Ваше поточне ім’я: <strong>{{ session.get('username') }}</strong></p>
           <input type="text" name="new_name" placeholder="Новий нік" class="InputText w-full max-w-lg">
@@ -48,7 +47,6 @@
       </div>
 
       <div id="email" class="hidden">
-         <!-- Форма возвращена к стандартному POST запросу -->
         <form method="post" action="{{ url_for('change_email') }}" class="space-y-2">
           <p>Ваша поточна пошта: <strong>{{ session.get('email') }}</strong></p>
           <input type="email" name="new_email" placeholder="Нова пошта" class="InputText w-full max-w-lg">
@@ -58,7 +56,6 @@
       </div>
 
       <div id="password" class="hidden">
-         <!-- Форма возвращена к стандартному POST запросу -->
         <form method="post" action="{{ url_for('change_password') }}" class="space-y-2">
           <p>Зміна пароля для: <strong>{{ session.get('username') }}</strong></p>
           <input type="password" name="old_password" placeholder="Старий пароль" class="InputText w-full max-w-lg">
